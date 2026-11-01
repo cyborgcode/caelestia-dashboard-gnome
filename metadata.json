@@ -1,0 +1,10 @@
+{
+  "uuid": "caelestia-dashboard@rayen.local",
+  "name": "Caelestia Dashboard",
+  "description": "Turns the clock's dropdown into Caelestia's dashboard: tabs for an overview, media, performance, workspaces and notifications, hanging from the top bar",
+  "shell-version": [
+    "50"
+  ],
+  "version": 1,
+  "url": "https://github.com/cyborgcode/caelestia-dashboard-gnome"
+}

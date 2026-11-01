@@ -1,0 +1,823 @@
+/* Caelestia's layered cards in Yaru-dark's colours:
+     surface   #131313 (the same as the top bar)    text        #f2f2f2
+     dock      #1b1b1b                              secondary   #b2b2b4
+     card      #222222                              muted       #9b9b9d
+     raised    #2f2f2f                              faint       #77777a
+     highest   #373737                              separator   #424247
+     hover     #4d4d4d                              accent text #ef825c
+     critical  #c7162b                              yellow      #fea320
+   Solid accents use the desktop's accent colour. */
+
+/* The popup around the dashboard is only there for the shell: it draws nothing of its own */
+
+.popup-menu.panel-menu.cd-popup {
+  -arrow-rise: 0;
+  -boxpointer-gap: 0;
+  margin-bottom: 0;
+}
+
+.cd-popup .popup-menu-content {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.cd-panel-ear {
+  width: 28px;
+  height: 28px;
+  color: #131313;
+}
+
+/* The bottom margin leaves room for the shadow, which the popup would otherwise clip */
+.cd-panel {
+  margin-bottom: 24px;
+  padding: 8px 16px 16px;
+  color: #f2f2f2;
+  background-color: #131313;
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* Tabs */
+
+.cd-tabs {
+  width: 839px;
+}
+
+.cd-tab {
+  padding: 5px 0;
+  border-radius: 12px;
+  color: #b2b2b4;
+}
+
+.cd-tab:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cd-tab:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-tab.selected {
+  color: #ef825c;
+}
+
+.cd-tab-content {
+  spacing: 2px;
+}
+
+.cd-tab-icon {
+  icon-size: 18px;
+}
+
+.cd-tab-label-row {
+  spacing: 6px;
+}
+
+.cd-tab-label {
+  font-size: 0.93em;
+}
+
+.cd-tab-badge {
+  padding: 0 6px;
+  border-radius: 999px;
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+  font-size: 0.8em;
+}
+
+.cd-tab-indicator-row {
+  height: 3px;
+  margin-top: 3px;
+}
+
+.cd-tab-indicator {
+  width: 100px;
+  height: 3px;
+  background-color: -st-accent-color;
+  border-radius: 3px 3px 0 0;
+}
+
+.cd-tab-separator {
+  height: 1px;
+  background-color: #424247;
+}
+
+/* Pages all share one size, so switching tabs never resizes the panel */
+
+.cd-pages {
+  width: 839px;
+  height: 410px;
+  margin-top: 12px;
+}
+
+.cd-page,
+.cd-overview-row,
+.cd-overview-column {
+  spacing: 12px;
+}
+
+.cd-card {
+  border-radius: 20px;
+  color: #f2f2f2;
+  background-color: #222222;
+}
+
+.cd-accent-primary {
+  color: -st-accent-color;
+}
+
+.cd-accent-secondary {
+  color: #b2b2b4;
+}
+
+.cd-accent-tertiary {
+  color: #fea320;
+}
+
+/* Dashboard tab */
+
+/* St's width leaves out padding, so these are Caelestia's card widths minus their padding */
+.cd-weather {
+  width: 235px;
+  height: 116px;
+  padding: 0 20px;
+  spacing: 20px;
+}
+
+.cd-weather-icon {
+  color: #f2f2f2;
+  icon-size: 64px;
+}
+
+.cd-weather-text {
+  spacing: 4px;
+}
+
+.cd-weather-temperature {
+  color: #ef825c;
+  font-size: 2.2em;
+  font-weight: 600;
+}
+
+.cd-weather-description {
+  color: #b2b2b4;
+  font-size: 0.85em;
+}
+
+.cd-user {
+  padding: 0 20px;
+  spacing: 16px;
+}
+
+.cd-avatar {
+  icon-size: 76px;
+  border-radius: 999px;
+  color: #b2b2b4;
+  background-color: #373737;
+}
+
+.cd-user-rows {
+  spacing: 6px;
+}
+
+.cd-user-row {
+  spacing: 10px;
+}
+
+.cd-user-row-icon {
+  icon-size: 16px;
+  color: #ef825c;
+}
+
+.cd-user-row-label {
+  font-size: 0.93em;
+}
+
+.cd-clock {
+  width: 110px;
+}
+
+.cd-clock-digits {
+  color: #f2f2f2;
+  font-size: 2.2em;
+  font-weight: 600;
+}
+
+.cd-clock-dots {
+  color: #ef825c;
+  font-size: 1.1em;
+}
+
+.cd-clock-meridiem {
+  color: #ef825c;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.cd-clock-date {
+  margin-top: 8px;
+  color: #b2b2b4;
+  font-size: 0.85em;
+}
+
+.cd-calendar {
+  padding: 8px 12px 12px;
+}
+
+.cd-calendar-header {
+  margin-bottom: 2px;
+}
+
+.cd-calendar-pager {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: #b2b2b4;
+}
+
+.cd-calendar-pager:hover,
+.cd-calendar-month:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cd-calendar-pager:focus,
+.cd-calendar-month:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-calendar-pager StIcon {
+  icon-size: 14px;
+}
+
+.cd-calendar-month {
+  padding: 2px 12px;
+  border-radius: 999px;
+  color: #ef825c;
+  font-weight: 600;
+}
+
+.cd-calendar-heading {
+  color: #f2f2f2;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.cd-calendar-day {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: #f2f2f2;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.cd-calendar-day.weekend {
+  color: #9b9b9d;
+}
+
+.cd-calendar-day.other-month {
+  color: #77777a;
+}
+
+.cd-calendar-day.today {
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+  font-weight: 600;
+}
+
+.cd-resources {
+  width: 94px;
+  padding: 16px 8px 12px;
+}
+
+.cd-resource {
+  spacing: 8px;
+}
+
+.cd-resource-track {
+  width: 14px;
+  -bar-track-color: #373737;
+}
+
+.cd-resource-icon {
+  icon-size: 16px;
+}
+
+/* Media, on the Dashboard tab and on its own */
+
+.cd-media-card {
+  width: 176px;
+  padding: 12px;
+}
+
+.cd-media {
+  spacing: 8px;
+}
+
+.cd-media-compact .cd-cover-stack {
+  width: 150px;
+  height: 150px;
+}
+
+.cd-media-full .cd-cover-stack {
+  width: 320px;
+  height: 320px;
+}
+
+.cd-arc {
+  color: -st-accent-color;
+  -arc-track-color: #373737;
+  -arc-width: 6px;
+}
+
+.cd-cover-button {
+  border-radius: 999px;
+  background-color: #373737;
+}
+
+.cd-cover-button:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-cover {
+  color: #b2b2b4;
+}
+
+.cd-media-compact .cd-cover {
+  icon-size: 130px;
+}
+
+.cd-media-full .cd-cover {
+  icon-size: 296px;
+}
+
+.cd-media-compact .cd-cover.no-art {
+  margin: 35px;
+  icon-size: 60px;
+}
+
+.cd-media-full .cd-cover.no-art {
+  margin: 88px;
+  icon-size: 120px;
+}
+
+.cd-media-details {
+  spacing: 4px;
+}
+
+.cd-media-full {
+  padding: 24px;
+  spacing: 32px;
+}
+
+.cd-media-full .cd-media-details {
+  spacing: 8px;
+}
+
+.cd-media-title {
+  color: #ef825c;
+  font-weight: 600;
+}
+
+.cd-media-full .cd-media-title {
+  font-size: 1.8em;
+}
+
+.cd-media-album {
+  color: #9b9b9d;
+  font-size: 0.85em;
+}
+
+.cd-media-full .cd-media-album {
+  font-size: 1em;
+}
+
+.cd-media-artist {
+  color: #b2b2b4;
+  font-size: 0.93em;
+}
+
+.cd-media-full .cd-media-artist {
+  font-size: 1.1em;
+}
+
+.cd-media-time {
+  color: #9b9b9d;
+}
+
+.cd-media-controls {
+  margin-top: 4px;
+  spacing: 4px;
+}
+
+.cd-media-control {
+  height: 32px;
+  border-radius: 999px;
+}
+
+.cd-media-full .cd-media-control {
+  height: 44px;
+}
+
+.cd-media-control StIcon {
+  icon-size: 16px;
+}
+
+.cd-media-skip {
+  color: #f2f2f2;
+  background-color: #373737;
+}
+
+.cd-media-play {
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+}
+
+.cd-media-control:hover {
+  opacity: 0.85;
+}
+
+.cd-media-control:insensitive {
+  color: #77777a;
+  background-color: #2f2f2f;
+}
+
+.cd-media-control:focus {
+  box-shadow: inset 0 0 0 2px #f2f2f2;
+}
+
+.cd-media-page-card {
+  padding: 0;
+}
+
+.cd-cat {
+  width: 100px;
+  height: 63px;
+}
+
+.cd-cat-frame {
+  background-size: contain;
+}
+
+.cd-cat-frame-0 {
+  background-image: url("bongocat-0.png");
+}
+
+.cd-cat-frame-1 {
+  background-image: url("bongocat-1.png");
+}
+
+.cd-media-full .cd-cat {
+  width: 160px;
+  height: 101px;
+}
+
+/* Performance tab */
+
+.cd-cpu {
+  padding: 20px;
+  spacing: 24px;
+}
+
+.cd-cpu-ring {
+  width: 140px;
+  height: 140px;
+}
+
+.cd-cpu-ring .cd-arc {
+  -arc-width: 10px;
+}
+
+.cd-cpu-percent {
+  color: #ef825c;
+  font-size: 1.8em;
+  font-weight: 600;
+}
+
+.cd-cpu-text {
+  spacing: 6px;
+}
+
+.cd-cpu-model {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.cd-cpu-temperature {
+  margin-top: 8px;
+  color: #b2b2b4;
+}
+
+.cd-stat {
+  padding: 16px 20px;
+  spacing: 6px;
+}
+
+.cd-stat-header {
+  spacing: 8px;
+}
+
+.cd-stat-icon {
+  icon-size: 18px;
+}
+
+.cd-stat-title {
+  color: #b2b2b4;
+}
+
+.cd-stat-value {
+  color: #f2f2f2;
+  font-size: 1.6em;
+  font-weight: 600;
+}
+
+.cd-stat-detail {
+  color: #9b9b9d;
+  font-size: 0.85em;
+}
+
+.cd-stat-track {
+  height: 8px;
+  -bar-track-color: #373737;
+}
+
+/* Workspaces tab */
+
+.cd-workspace {
+  padding: 20px;
+}
+
+.cd-workspace:hover {
+  background-color: #2f2f2f;
+}
+
+.cd-workspace:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-workspace.current {
+  background-color: #373737;
+}
+
+.cd-workspace-title {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.cd-workspace-icons {
+  spacing: 8px;
+}
+
+/* Notifications tab */
+
+.cd-dock {
+  padding: 12px 2px 12px 12px;
+  border-radius: 16px;
+  background-color: #1b1b1b;
+}
+
+.cd-dock-title {
+  padding: 0 4px 12px;
+  color: #9b9b9d;
+  font-size: 0.93em;
+  font-weight: 500;
+}
+
+.cd-dock StScrollView.vfade {
+  -st-vfade-offset: 24px;
+}
+
+/* Gaps are margins rather than spacing, so that they can close along with a card being removed */
+.cd-dock-list {
+  padding-right: 10px;
+}
+
+.cd-dock-list-end {
+  height: 64px;
+}
+
+.cd-group {
+  margin-bottom: 8px;
+  spacing: 12px;
+  padding: 12px 12px 8px;
+  border-radius: 16px;
+  background-color: #222222;
+}
+
+.cd-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: #f2f2f2;
+  background-color: #373737;
+}
+
+.cd-group.low .cd-avatar {
+  color: #f2f2f2;
+  background-color: #373737;
+}
+
+.cd-group.critical .cd-avatar {
+  color: #ffffff;
+  background-color: #c7162b;
+}
+
+.cd-avatar-icon {
+  icon-size: 25px;
+}
+
+.cd-avatar.has-image .cd-avatar-icon {
+  icon-size: 42px;
+}
+
+.cd-avatar-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  color: #f2f2f2;
+  background-color: #373737;
+}
+
+.cd-avatar-badge-icon {
+  icon-size: 12px;
+}
+
+.cd-group.low .cd-avatar-badge {
+  color: #f2f2f2;
+  background-color: #373737;
+}
+
+.cd-group.critical .cd-avatar-badge {
+  color: #ffffff;
+  background-color: #c7162b;
+}
+
+.cd-group-column {
+  spacing: 4px;
+}
+
+/* Lines the app name up with the text of the rows below it */
+.cd-group-header {
+  padding-left: 4px;
+  spacing: 8px;
+}
+
+.cd-group-title {
+  color: #b2b2b4;
+  font-size: 0.85em;
+}
+
+.cd-time {
+  color: #9b9b9d;
+  font-size: 0.85em;
+}
+
+.cd-count-button {
+  padding: 1px 6px 1px 10px;
+  border-radius: 999px;
+  color: #b2b2b4;
+  background-color: #373737;
+  font-size: 0.85em;
+}
+
+.cd-count-button:hover {
+  background-color: #4d4d4d;
+}
+
+.cd-count-button:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-group.critical .cd-count-button {
+  color: #ffffff;
+  background-color: #c7162b;
+}
+
+.cd-count-box {
+  spacing: 2px;
+}
+
+.cd-count-chevron {
+  icon-size: 16px;
+}
+
+.cd-row {
+  margin-bottom: 4px;
+  padding: 2px 4px;
+  border-radius: 12px;
+  color: #f2f2f2;
+}
+
+.cd-row:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cd-row:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-row.expanded {
+  padding: 12px;
+  background-color: #2f2f2f;
+}
+
+.cd-row.expanded:hover {
+  background-color: #373737;
+}
+
+.cd-row-headline {
+  spacing: 8px;
+}
+
+.cd-row-summary {
+  color: #f2f2f2;
+}
+
+.cd-row-preview {
+  color: #9b9b9d;
+}
+
+.cd-row-body {
+  margin-top: 4px;
+  color: #b2b2b4;
+  link-color: #ef825c;
+}
+
+.cd-row-actions {
+  margin-top: 12px;
+  spacing: 8px;
+}
+
+.cd-action-button {
+  min-width: 16px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  color: #b2b2b4;
+  background-color: #424247;
+}
+
+.cd-action-button:hover {
+  background-color: #4d4d4d;
+}
+
+.cd-action-button:active {
+  background-color: #56565c;
+}
+
+.cd-action-button:focus {
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+
+.cd-action-button StIcon {
+  icon-size: 16px;
+}
+
+.cd-clear-button {
+  width: 56px;
+  height: 56px;
+  margin: 4px 14px 4px 4px;
+  border-radius: 999px;
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+}
+
+.cd-clear-button StIcon {
+  icon-size: 24px;
+}
+
+.cd-clear-button:focus {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), inset 0 0 0 2px #f2f2f2;
+}
+
+.cd-placeholder {
+  spacing: 20px;
+}
+
+.cd-placeholder-image {
+  width: 300px;
+  height: 131px;
+  background-image: url("dino.png");
+  background-size: contain;
+}
+
+.cd-placeholder-label {
+  color: #9b9b9d;
+  font-size: 1.4em;
+  font-weight: 500;
+}
+
+/* Hover and press states ease in rather than snap, as Yaru's own buttons do */
+.cd-tab,
+.cd-row,
+.cd-count-button,
+.cd-action-button,
+.cd-media-control,
+.cd-calendar-pager,
+.cd-calendar-month,
+.cd-workspace {
+  transition-duration: 100ms;
+}
