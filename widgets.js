@@ -15,6 +15,22 @@ export function setStyleClass(actor, name, enabled) {
         actor.remove_style_class_name(name);
 }
 
+// Outlines the concave corner that blends a panel into the top bar, in a size by size square at x. The
+// panel is on its right for END and on its left for START.
+export function addPanelEarPath(cr, x, size, panelSide) {
+    if (panelSide === Clutter.ActorAlign.END) {
+        cr.moveTo(x + size, size);
+        cr.lineTo(x + size, 0);
+        cr.lineTo(x, 0);
+        cr.arc(x, size, size, -Math.PI / 2, 0);
+    } else {
+        cr.moveTo(x, size);
+        cr.lineTo(x, 0);
+        cr.lineTo(x + size, 0);
+        cr.arcNegative(x + size, size, size, -Math.PI / 2, Math.PI);
+    }
+}
+
 // Crops an image to a circle
 export const CircleClipEffect = GObject.registerClass(
 class CircleClipEffect extends Shell.GLSLEffect {

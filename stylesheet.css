@@ -8,15 +8,20 @@
      critical  #c7162b                              yellow      #fea320
    Solid accents use the desktop's accent colour. */
 
-/* The popup around the dashboard is only there for the shell: it draws nothing of its own */
+/* Menus hung from the top bar sit right against it */
 
-.popup-menu.panel-menu.cd-popup {
+.popup-menu-boxpointer.cd-popup {
   -arrow-rise: 0;
   -boxpointer-gap: 0;
+}
+
+.popup-menu.panel-menu.cd-popup {
   margin-bottom: 0;
 }
 
-.cd-popup .popup-menu-content {
+/* The popup around the dashboard is only there for the shell: it draws nothing of its own */
+
+.cd-popup .datemenu-popover {
   padding: 0;
   background-color: transparent;
   border: 0;
@@ -819,5 +824,151 @@
 .cd-calendar-pager,
 .cd-calendar-month,
 .cd-workspace {
+  transition-duration: 100ms;
+}
+
+/* Quick Settings, in the dashboard's style. It hangs in the top right corner, so its one ear is on the
+   left, drawn by the popup itself into the room the left margin leaves. */
+
+.cd-quick-ear {
+  -cd-ear-size: 28px;
+  color: #131313;
+}
+
+/* The bottom margin leaves room for the shadow */
+.cd-quick .quick-settings {
+  margin: 0 0 24px 28px;
+  padding: 16px;
+  color: #f2f2f2;
+  background-color: #131313;
+  border: 0;
+  border-radius: 0 0 0 28px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.cd-quick .quick-toggle {
+  color: #f2f2f2;
+  background-color: #222222;
+  border-radius: 16px;
+}
+
+.cd-quick .quick-toggle:hover {
+  background-color: #2f2f2f;
+}
+
+.cd-quick .quick-toggle:active {
+  background-color: #373737;
+}
+
+.cd-quick .quick-toggle:checked {
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+}
+
+.cd-quick .quick-toggle:checked:hover {
+  background-color: st-lighten(-st-accent-color, 6%);
+}
+
+.cd-quick .quick-toggle:checked:active {
+  background-color: st-lighten(-st-accent-color, 12%);
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle:ltr {
+  border-radius: 16px 0 0 16px;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle:ltr:last-child {
+  border-radius: 16px;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle:rtl {
+  border-radius: 0 16px 16px 0;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle:rtl:last-child {
+  border-radius: 16px;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button {
+  background-color: #2f2f2f;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:hover {
+  background-color: #373737;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:active {
+  background-color: #4d4d4d;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:ltr {
+  border-radius: 0 16px 16px 0;
+}
+
+.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:rtl {
+  border-radius: 16px 0 0 16px;
+}
+
+.cd-quick .slider {
+  color: #f2f2f2;
+  -barlevel-height: 6px;
+  -barlevel-background-color: #373737;
+  -barlevel-active-background-color: -st-accent-color;
+}
+
+.cd-quick .quick-slider .icon-button:hover {
+  background-color: #2f2f2f;
+}
+
+.cd-quick .quick-settings-system-item .icon-button {
+  color: #f2f2f2;
+  background-color: #222222;
+  border-radius: 999px;
+}
+
+.cd-quick .quick-settings-system-item .icon-button:hover {
+  background-color: #2f2f2f;
+}
+
+.cd-quick .quick-settings-system-item .icon-button:active {
+  background-color: #373737;
+}
+
+/* The menus that open over the grid, like Wi-Fi's network list */
+
+.cd-quick .quick-toggle-menu {
+  color: #f2f2f2;
+  background-color: #222222;
+  border: 0;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.cd-quick .quick-toggle-menu .header .icon {
+  background-color: #373737;
+}
+
+.cd-quick .quick-toggle-menu .header .icon.active {
+  color: -st-accent-fg-color;
+  background-color: -st-accent-color;
+}
+
+.cd-quick .quick-toggle-menu .popup-menu-item:hover,
+.cd-quick .quick-toggle-menu .popup-menu-item:selected {
+  background-color: #2f2f2f;
+}
+
+.cd-quick .quick-toggle-menu .popup-menu-item:active {
+  background-color: #373737;
+}
+
+.cd-quick .quick-toggle-menu .popup-separator-menu-item .popup-separator-menu-item-separator {
+  background-color: #424247;
+}
+
+.cd-quick .quick-toggle,
+.cd-quick .quick-toggle-menu-button,
+.cd-quick .icon-button,
+.cd-quick .popup-menu-item {
   transition-duration: 100ms;
 }

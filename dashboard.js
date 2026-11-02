@@ -13,7 +13,7 @@ import {Avatar} from 'resource:///org/gnome/shell/ui/userWidget.js';
 import {NotificationDock} from './dock.js';
 import {MediaController, MediaView} from './media.js';
 import {formatUptime, SystemStats, WeatherClient} from './system.js';
-import {ArcProgress, LevelBar, setStyleClass} from './widgets.js';
+import {addPanelEarPath, ArcProgress, LevelBar, setStyleClass} from './widgets.js';
 
 const extensionDirectory = GLib.path_get_dirname(GLib.filename_from_uri(import.meta.url)[0]);
 
@@ -37,29 +37,17 @@ function createCard(styleClass, params) {
 // The concave corner that blends the dashboard into the top bar. Its colour comes from CSS.
 export const PanelEar = GObject.registerClass(
 class PanelEar extends St.DrawingArea {
-    constructor(curveTowards) {
+    constructor(panelSide) {
         super({style_class: 'cd-panel-ear', y_align: Clutter.ActorAlign.START});
-        this._curveTowards = curveTowards;
+        this._panelSide = panelSide;
     }
 
     vfunc_repaint() {
         const cr = this.get_context();
-        const [width, height] = this.get_surface_size();
+        const [, height] = this.get_surface_size();
 
         cr.setSourceColor(this.get_theme_node().get_foreground_color());
-        if (this._curveTowards === Clutter.ActorAlign.END) {
-            // Left of the dashboard
-            cr.moveTo(width, height);
-            cr.lineTo(width, 0);
-            cr.lineTo(0, 0);
-            cr.arc(0, height, height, -Math.PI / 2, 0);
-        } else {
-            // Right of the dashboard
-            cr.moveTo(0, height);
-            cr.lineTo(0, 0);
-            cr.lineTo(width, 0);
-            cr.arcNegative(width, height, height, -Math.PI / 2, Math.PI);
-        }
+        addPanelEarPath(cr, 0, height, this._panelSide);
         cr.fill();
 
         cr.$dispose();
