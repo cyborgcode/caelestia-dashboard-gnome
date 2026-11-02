@@ -818,9 +818,10 @@ class Dashboard extends St.BoxLayout {
         delete this._weatherRefreshId;
     }
 
-    // Laying out a page and showing it for the first time takes long enough to spoil an animation, so
-    // each page gets that over with ahead of time: one per step, for one frame, with the menu fully
-    // transparent. The weather comes last, so the first open has it ready too.
+    // Laying out, showing and painting a page for the first time takes long enough to spoil an animation,
+    // so each page gets that over with ahead of time: one per step, for one frame. The menu is all but
+    // transparent then, rather than fully, because a fully transparent actor isn't painted at all. The
+    // weather comes last, so the first open has it ready too.
     prepareInBackground(menu) {
         const popup = menu.actor;
         const pages = [...this._pages];
@@ -841,7 +842,7 @@ class Dashboard extends St.BoxLayout {
             }
 
             page.show();
-            popup.opacity = 0;
+            popup.opacity = 1;
             popup.show();
             this._prepareFrameId = global.stage.connect('after-update', () => {
                 this._stopWaitingForPrepareFrame();
