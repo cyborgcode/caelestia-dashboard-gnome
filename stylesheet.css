@@ -7,41 +7,10 @@
      tracks    rgba(255, 255, 255, 0.1), like Yaru's sliders
    Accents use the desktop's accent colour, with Yaru's lighter mix of it for small text. */
 
-/* Menus hung from the top bar sit right against it */
-
-.popup-menu-boxpointer.cd-popup {
-  -arrow-rise: 0;
-  -boxpointer-gap: 0;
-}
-
-.popup-menu.panel-menu.cd-popup {
-  margin-bottom: 0;
-}
-
-/* The popup around the dashboard is only there for the shell: it draws nothing of its own */
-
-.cd-popup .datemenu-popover {
-  padding: 0;
-  background-color: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.cd-panel-ear {
-  width: 28px;
-  height: 28px;
-  color: #36363a;
-}
-
-/* The bottom margin leaves room for the shadow, which the popup would otherwise clip */
+/* GNOME's own popup draws the background, border, corners and shadow around the dashboard */
 .cd-panel {
-  margin-bottom: 24px;
-  padding: 8px 16px 16px;
+  padding: 6px 10px 10px;
   color: white;
-  background-color: #36363a;
-  border-radius: 0 0 28px 28px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
 
 /* Tabs */
@@ -824,21 +793,4 @@
 .cd-calendar-month,
 .cd-workspace {
   transition-duration: 100ms;
-}
-
-/* Quick Settings keeps Yaru's own colours and only hangs from the top bar. It sits in the top right
-   corner, so its one ear is on the left, drawn by the popup itself into the room the left margin leaves. */
-
-.cd-quick-ear {
-  -cd-ear-size: 28px;
-  color: #36363a;
-}
-
-/* Yaru's background, without the border that would show against the bar. The bottom margin leaves room
-   for the shadow. */
-.cd-quick .quick-settings {
-  margin: 0 0 24px 28px;
-  border: 0;
-  border-radius: 0 0 0 28px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }

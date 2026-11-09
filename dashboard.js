@@ -13,7 +13,7 @@ import {Avatar} from 'resource:///org/gnome/shell/ui/userWidget.js';
 import {NotificationDock} from './dock.js';
 import {MediaController, MediaView} from './media.js';
 import {formatUptime, SystemStats, WeatherClient} from './system.js';
-import {addPanelEarPath, ArcProgress, LevelBar, setStyleClass} from './widgets.js';
+import {ArcProgress, LevelBar, setStyleClass} from './widgets.js';
 
 const extensionDirectory = GLib.path_get_dirname(GLib.filename_from_uri(import.meta.url)[0]);
 
@@ -33,26 +33,6 @@ function extensionIcon(name) {
 function createCard(styleClass, params) {
     return new St.BoxLayout({style_class: `cd-card ${styleClass}`, ...params});
 }
-
-// The concave corner that blends the dashboard into the top bar. Its colour comes from CSS.
-export const PanelEar = GObject.registerClass(
-class PanelEar extends St.DrawingArea {
-    constructor(panelSide) {
-        super({style_class: 'cd-panel-ear', y_align: Clutter.ActorAlign.START});
-        this._panelSide = panelSide;
-    }
-
-    vfunc_repaint() {
-        const cr = this.get_context();
-        const [, height] = this.get_surface_size();
-
-        cr.setSourceColor(this.get_theme_node().get_foreground_color());
-        addPanelEarPath(cr, 0, height, this._panelSide);
-        cr.fill();
-
-        cr.$dispose();
-    }
-});
 
 const WeatherCard = GObject.registerClass(
 class WeatherCard extends St.BoxLayout {

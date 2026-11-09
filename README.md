@@ -4,20 +4,15 @@ A GNOME Shell extension that turns the clock's dropdown into the dashboard from
 [Caelestia Shell](https://github.com/caelestia-dots/shell), in the colours of Yaru-dark's Quick Settings and your desktop's
 accent colour.
 
-![The dashboard hanging from the top bar](screenshot.png)
+![The dashboard under the clock](screenshot.png)
 
-Click the clock and the panel slides out from behind the top bar. It has five tabs:
+Click the clock and it opens in GNOME's usual popup, with GNOME's own animation. It has five tabs:
 
 - **Dashboard:** weather, your profile picture and system info, clock, calendar, CPU, memory and storage bars, and a media player with a progress arc and bongo cat
 - **Media:** a larger player with the track time
 - **Performance:** CPU with temperature, memory, storage, network and battery
 - **Workspaces:** a card per workspace with its open apps; click one to go there
 - **Notifications:** per-app cards with a count on the tab. Swipe sideways or middle-click a notification to dismiss it, and right-click to expand its card
-
-The Quick Settings menu in the top right keeps Yaru's own look. Like the dashboard, it hangs from the bar, in the corner
-of the screen, and slides out the same way.
-
-![Quick Settings hanging from the top right corner](screenshot-quick-settings.png)
 
 ## Requirements
 
