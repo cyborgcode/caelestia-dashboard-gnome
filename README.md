@@ -1,8 +1,8 @@
 # Caelestia Dashboard for GNOME
 
 A GNOME Shell extension that turns the clock's dropdown into the dashboard from
-[Caelestia Shell](https://github.com/caelestia-dots/shell) and gives Quick Settings the same look, in Yaru's dark colours
-and your desktop's accent colour.
+[Caelestia Shell](https://github.com/caelestia-dots/shell), in the colours of Yaru-dark's Quick Settings and your desktop's
+accent colour.
 
 ![The dashboard hanging from the top bar](screenshot.png)
 
@@ -14,8 +14,8 @@ Click the clock and the panel slides out from behind the top bar. It has five ta
 - **Workspaces:** a card per workspace with its open apps; click one to go there
 - **Notifications:** per-app cards with a count on the tab. Swipe sideways or middle-click a notification to dismiss it, and right-click to expand its card
 
-The Quick Settings menu in the top right gets the same colours and cards. It hangs from the bar in the corner of the
-screen and slides out the same way.
+The Quick Settings menu in the top right keeps Yaru's own look. Like the dashboard, it hangs from the bar, in the corner
+of the screen, and slides out the same way.
 
 ![Quick Settings hanging from the top right corner](screenshot-quick-settings.png)
 
@@ -40,7 +40,7 @@ gnome-extensions enable caelestia-dashboard@rayen.local
 - **Weather:** the card gets its reading from [wttr.in](https://wttr.in), which works out your location from your IP address and so sees that address.
 - **Left out from Caelestia:** the Media tab has no lyrics or audio visualiser, and the Performance tab has no GPU card. Workspaces replaces Caelestia's current Weather tab.
 - **Left out from GNOME:** calendar events and world clocks aren't in the dashboard.
-- **Colours:** the dark greys and the lighter orange of small accent text are fixed. Solid accents, like today's date, follow your desktop's accent colour.
+- **Colours:** the dashboard uses Yaru-dark's Quick Settings colours, so it's made for that theme. Accents follow your desktop's accent colour.
 
 ## Credits
 

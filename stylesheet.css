@@ -1,12 +1,11 @@
-/* Caelestia's layered cards in Yaru-dark's colours:
-     surface   #131313 (the same as the top bar)    text        #f2f2f2
-     dock      #1b1b1b                              secondary   #b2b2b4
-     card      #222222                              muted       #9b9b9d
-     raised    #2f2f2f                              faint       #77777a
-     highest   #373737                              separator   #424247
-     hover     #4d4d4d                              accent text #ef825c
-     critical  #c7162b                              yellow      #fea320
-   Solid accents use the desktop's accent colour. */
+/* Caelestia's layered cards in the colours of Yaru-dark's Quick Settings:
+     panel     #36363a, Yaru's popup background
+     card      st-mix(white, #36363a, 9%), Yaru's button
+     raised    the card lightened 4%, as a Yaru button is on hover
+     highest   the card lightened 9%, as a Yaru button is when pressed
+     text      white, with #b2b2b4 and #9b9b9d for secondary and muted text
+     tracks    rgba(255, 255, 255, 0.1), like Yaru's sliders
+   Accents use the desktop's accent colour, with Yaru's lighter mix of it for small text. */
 
 /* Menus hung from the top bar sit right against it */
 
@@ -32,15 +31,15 @@
 .cd-panel-ear {
   width: 28px;
   height: 28px;
-  color: #131313;
+  color: #36363a;
 }
 
 /* The bottom margin leaves room for the shadow, which the popup would otherwise clip */
 .cd-panel {
   margin-bottom: 24px;
   padding: 8px 16px 16px;
-  color: #f2f2f2;
-  background-color: #131313;
+  color: white;
+  background-color: #36363a;
   border-radius: 0 0 28px 28px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
@@ -66,7 +65,7 @@
 }
 
 .cd-tab.selected {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
 }
 
 .cd-tab-content {
@@ -107,7 +106,7 @@
 
 .cd-tab-separator {
   height: 1px;
-  background-color: #424247;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Pages all share one size, so switching tabs never resizes the panel */
@@ -126,8 +125,8 @@
 
 .cd-card {
   border-radius: 20px;
-  color: #f2f2f2;
-  background-color: #222222;
+  color: white;
+  background-color: st-mix(white, #36363a, 9%);
 }
 
 .cd-accent-primary {
@@ -153,7 +152,7 @@
 }
 
 .cd-weather-icon {
-  color: #f2f2f2;
+  color: white;
   icon-size: 64px;
 }
 
@@ -162,7 +161,7 @@
 }
 
 .cd-weather-temperature {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-size: 2.2em;
   font-weight: 600;
 }
@@ -181,7 +180,7 @@
   icon-size: 76px;
   border-radius: 999px;
   color: #b2b2b4;
-  background-color: #373737;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-user-rows {
@@ -194,7 +193,7 @@
 
 .cd-user-row-icon {
   icon-size: 16px;
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
 }
 
 .cd-user-row-label {
@@ -206,18 +205,18 @@
 }
 
 .cd-clock-digits {
-  color: #f2f2f2;
+  color: white;
   font-size: 2.2em;
   font-weight: 600;
 }
 
 .cd-clock-dots {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-size: 1.1em;
 }
 
 .cd-clock-meridiem {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-size: 0.85em;
   font-weight: 600;
 }
@@ -260,12 +259,12 @@
 .cd-calendar-month {
   padding: 2px 12px;
   border-radius: 999px;
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-weight: 600;
 }
 
 .cd-calendar-heading {
-  color: #f2f2f2;
+  color: white;
   font-size: 0.8em;
   font-weight: 600;
 }
@@ -274,7 +273,7 @@
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  color: #f2f2f2;
+  color: white;
   font-size: 0.85em;
   text-align: center;
 }
@@ -284,7 +283,7 @@
 }
 
 .cd-calendar-day.other-month {
-  color: #77777a;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .cd-calendar-day.today {
@@ -304,7 +303,7 @@
 
 .cd-resource-track {
   width: 14px;
-  -bar-track-color: #373737;
+  -bar-track-color: rgba(255, 255, 255, 0.1);
 }
 
 .cd-resource-icon {
@@ -334,13 +333,13 @@
 
 .cd-arc {
   color: -st-accent-color;
-  -arc-track-color: #373737;
+  -arc-track-color: rgba(255, 255, 255, 0.1);
   -arc-width: 6px;
 }
 
 .cd-cover-button {
   border-radius: 999px;
-  background-color: #373737;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-cover-button:focus {
@@ -383,7 +382,7 @@
 }
 
 .cd-media-title {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-weight: 600;
 }
 
@@ -432,8 +431,8 @@
 }
 
 .cd-media-skip {
-  color: #f2f2f2;
-  background-color: #373737;
+  color: white;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-media-play {
@@ -446,12 +445,12 @@
 }
 
 .cd-media-control:insensitive {
-  color: #77777a;
-  background-color: #2f2f2f;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 4%);
 }
 
 .cd-media-control:focus {
-  box-shadow: inset 0 0 0 2px #f2f2f2;
+  box-shadow: inset 0 0 0 2px white;
 }
 
 .cd-media-page-card {
@@ -497,7 +496,7 @@
 }
 
 .cd-cpu-percent {
-  color: #ef825c;
+  color: st-mix(-st-accent-color, #ffffff, 60%);
   font-size: 1.8em;
   font-weight: 600;
 }
@@ -534,7 +533,7 @@
 }
 
 .cd-stat-value {
-  color: #f2f2f2;
+  color: white;
   font-size: 1.6em;
   font-weight: 600;
 }
@@ -546,7 +545,7 @@
 
 .cd-stat-track {
   height: 8px;
-  -bar-track-color: #373737;
+  -bar-track-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Workspaces tab */
@@ -556,7 +555,7 @@
 }
 
 .cd-workspace:hover {
-  background-color: #2f2f2f;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 4%);
 }
 
 .cd-workspace:focus {
@@ -564,7 +563,7 @@
 }
 
 .cd-workspace.current {
-  background-color: #373737;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-workspace-title {
@@ -581,7 +580,7 @@
 .cd-dock {
   padding: 12px 2px 12px 12px;
   border-radius: 16px;
-  background-color: #1b1b1b;
+  background-color: transparent;
 }
 
 .cd-dock-title {
@@ -609,20 +608,20 @@
   spacing: 12px;
   padding: 12px 12px 8px;
   border-radius: 16px;
-  background-color: #222222;
+  background-color: st-mix(white, #36363a, 9%);
 }
 
 .cd-avatar {
   width: 42px;
   height: 42px;
   border-radius: 999px;
-  color: #f2f2f2;
-  background-color: #373737;
+  color: white;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-group.low .cd-avatar {
-  color: #f2f2f2;
-  background-color: #373737;
+  color: white;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-group.critical .cd-avatar {
@@ -642,8 +641,8 @@
   width: 20px;
   height: 20px;
   border-radius: 999px;
-  color: #f2f2f2;
-  background-color: #373737;
+  color: white;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-avatar-badge-icon {
@@ -651,8 +650,8 @@
 }
 
 .cd-group.low .cd-avatar-badge {
-  color: #f2f2f2;
-  background-color: #373737;
+  color: white;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-group.critical .cd-avatar-badge {
@@ -684,12 +683,12 @@
   padding: 1px 6px 1px 10px;
   border-radius: 999px;
   color: #b2b2b4;
-  background-color: #373737;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
   font-size: 0.85em;
 }
 
 .cd-count-button:hover {
-  background-color: #4d4d4d;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 13%);
 }
 
 .cd-count-button:focus {
@@ -713,7 +712,7 @@
   margin-bottom: 4px;
   padding: 2px 4px;
   border-radius: 12px;
-  color: #f2f2f2;
+  color: white;
 }
 
 .cd-row:hover {
@@ -726,11 +725,11 @@
 
 .cd-row.expanded {
   padding: 12px;
-  background-color: #2f2f2f;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 4%);
 }
 
 .cd-row.expanded:hover {
-  background-color: #373737;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 9%);
 }
 
 .cd-row-headline {
@@ -738,7 +737,7 @@
 }
 
 .cd-row-summary {
-  color: #f2f2f2;
+  color: white;
 }
 
 .cd-row-preview {
@@ -748,7 +747,7 @@
 .cd-row-body {
   margin-top: 4px;
   color: #b2b2b4;
-  link-color: #ef825c;
+  link-color: st-mix(-st-accent-color, #ffffff, 60%);
 }
 
 .cd-row-actions {
@@ -761,15 +760,15 @@
   padding: 6px 12px;
   border-radius: 12px;
   color: #b2b2b4;
-  background-color: #424247;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 13%);
 }
 
 .cd-action-button:hover {
-  background-color: #4d4d4d;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 17%);
 }
 
 .cd-action-button:active {
-  background-color: #56565c;
+  background-color: st-lighten(st-mix(white, #36363a, 9%), 21%);
 }
 
 .cd-action-button:focus {
@@ -795,7 +794,7 @@
 }
 
 .cd-clear-button:focus {
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), inset 0 0 0 2px #f2f2f2;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), inset 0 0 0 2px white;
 }
 
 .cd-placeholder {
@@ -827,148 +826,19 @@
   transition-duration: 100ms;
 }
 
-/* Quick Settings, in the dashboard's style. It hangs in the top right corner, so its one ear is on the
-   left, drawn by the popup itself into the room the left margin leaves. */
+/* Quick Settings keeps Yaru's own colours and only hangs from the top bar. It sits in the top right
+   corner, so its one ear is on the left, drawn by the popup itself into the room the left margin leaves. */
 
 .cd-quick-ear {
   -cd-ear-size: 28px;
-  color: #131313;
+  color: #36363a;
 }
 
-/* The bottom margin leaves room for the shadow */
+/* Yaru's background, without the border that would show against the bar. The bottom margin leaves room
+   for the shadow. */
 .cd-quick .quick-settings {
   margin: 0 0 24px 28px;
-  padding: 16px;
-  color: #f2f2f2;
-  background-color: #131313;
   border: 0;
   border-radius: 0 0 0 28px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
-}
-
-.cd-quick .quick-toggle {
-  color: #f2f2f2;
-  background-color: #222222;
-  border-radius: 16px;
-}
-
-.cd-quick .quick-toggle:hover {
-  background-color: #2f2f2f;
-}
-
-.cd-quick .quick-toggle:active {
-  background-color: #373737;
-}
-
-.cd-quick .quick-toggle:checked {
-  color: -st-accent-fg-color;
-  background-color: -st-accent-color;
-}
-
-.cd-quick .quick-toggle:checked:hover {
-  background-color: st-lighten(-st-accent-color, 6%);
-}
-
-.cd-quick .quick-toggle:checked:active {
-  background-color: st-lighten(-st-accent-color, 12%);
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle:ltr {
-  border-radius: 16px 0 0 16px;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle:ltr:last-child {
-  border-radius: 16px;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle:rtl {
-  border-radius: 0 16px 16px 0;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle:rtl:last-child {
-  border-radius: 16px;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button {
-  background-color: #2f2f2f;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:hover {
-  background-color: #373737;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:active {
-  background-color: #4d4d4d;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:ltr {
-  border-radius: 0 16px 16px 0;
-}
-
-.cd-quick .quick-toggle-has-menu .quick-toggle-menu-button:rtl {
-  border-radius: 16px 0 0 16px;
-}
-
-.cd-quick .slider {
-  color: #f2f2f2;
-  -barlevel-height: 6px;
-  -barlevel-background-color: #373737;
-  -barlevel-active-background-color: -st-accent-color;
-}
-
-.cd-quick .quick-slider .icon-button:hover {
-  background-color: #2f2f2f;
-}
-
-.cd-quick .quick-settings-system-item .icon-button {
-  color: #f2f2f2;
-  background-color: #222222;
-  border-radius: 999px;
-}
-
-.cd-quick .quick-settings-system-item .icon-button:hover {
-  background-color: #2f2f2f;
-}
-
-.cd-quick .quick-settings-system-item .icon-button:active {
-  background-color: #373737;
-}
-
-/* The menus that open over the grid, like Wi-Fi's network list */
-
-.cd-quick .quick-toggle-menu {
-  color: #f2f2f2;
-  background-color: #222222;
-  border: 0;
-  border-radius: 20px;
-  box-shadow: none;
-}
-
-.cd-quick .quick-toggle-menu .header .icon {
-  background-color: #373737;
-}
-
-.cd-quick .quick-toggle-menu .header .icon.active {
-  color: -st-accent-fg-color;
-  background-color: -st-accent-color;
-}
-
-.cd-quick .quick-toggle-menu .popup-menu-item:hover,
-.cd-quick .quick-toggle-menu .popup-menu-item:selected {
-  background-color: #2f2f2f;
-}
-
-.cd-quick .quick-toggle-menu .popup-menu-item:active {
-  background-color: #373737;
-}
-
-.cd-quick .quick-toggle-menu .popup-separator-menu-item .popup-separator-menu-item-separator {
-  background-color: #424247;
-}
-
-.cd-quick .quick-toggle,
-.cd-quick .quick-toggle-menu-button,
-.cd-quick .icon-button,
-.cd-quick .popup-menu-item {
-  transition-duration: 100ms;
 }
