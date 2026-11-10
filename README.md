@@ -33,6 +33,8 @@ gnome-extensions enable caelestia-dashboard@rayen.local
 ## Good to know
 
 - **Weather:** the card gets its reading from [wttr.in](https://wttr.in), which works out your location from your IP address and so sees that address.
+- **Album covers:** browsers often pass on a small thumbnail as the cover, and Firefox does this on YouTube. When the picture is smaller than 400 pixels, the dashboard looks the song up on Apple's iTunes Search and shows its 600-pixel cover instead. It sends only the title and artist, and only while the dashboard is open, and it shows a result only when both agree with the song. Apple also sees your IP address. Fetched covers stay in memory and are never written to disk.
+- **Top-bar menus:** while a top-bar menu is open, GNOME opens the menu of every icon the pointer passes over. The extension waits until the pointer stops on an icon before switching. This applies to every top-bar menu, and switching with the keyboard is still instant.
 - **Left out from Caelestia:** the Media tab has no lyrics or audio visualiser, and the Performance tab has no GPU card. Workspaces replaces Caelestia's current Weather tab.
 - **Left out from GNOME:** calendar events and world clocks aren't in the dashboard.
 - **Colours:** the dashboard uses Yaru-dark's Quick Settings colours, so it's made for that theme. Accents follow your desktop's accent colour.

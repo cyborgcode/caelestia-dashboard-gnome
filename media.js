@@ -1,7 +1,9 @@
 import Clutter from 'gi://Clutter';
+import GdkPixbuf from 'gi://GdkPixbuf';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
+import Soup from 'gi://Soup?version=3.0';
 import St from 'gi://St';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
@@ -12,10 +14,181 @@ const PLAYER_INTERFACE = 'org.mpris.MediaPlayer2.Player';
 const PLAYER_PATH = '/org/mpris/MediaPlayer2';
 // How long the cat holds each paw, in milliseconds
 const CAT_FRAME_TIME = 200;
+// Apple's iTunes Search finds a song's cover without an account
+const COVER_SEARCH_URL = 'https://itunes.apple.com/search';
+// Pictures smaller than this look soft on the Media tab, in pixels
+const MIN_COVER_SIZE = 400;
+// The size of cover to fetch, in pixels
+const FETCHED_COVER_SIZE = 600;
+// Fetched covers kept for songs that come round again
+const MAX_SAVED_COVERS = 20;
+
+const textDecoder = new TextDecoder();
 
 function formatTime(microseconds) {
     const seconds = Math.floor(microseconds / GLib.USEC_PER_SEC);
     return `${Math.floor(seconds / 60)}:${`${seconds % 60}`.padStart(2, '0')}`;
+}
+
+// Browsers pass on the first picture a site lists, which is often a thumbnail
+function isSmallPicture(url) {
+    const path = url ? Gio.File.new_for_uri(url).get_path() : null;
+    if (!path)
+        return false;
+
+    const [format, width, height] = GdkPixbuf.Pixbuf.get_file_info(path);
+    return !!format && Math.max(width, height) < MIN_COVER_SIZE;
+}
+
+// Video sites add brackets and "Official Video" to song titles, and music catalogues add "(feat. …)"
+function cleanTitle(title) {
+    return title
+        .replace(/\s*[([【][^)\]】]*[)\]】]/g, '')
+        .replace(/\s*[-–—|]?\s*\bofficial\s+(music\s+|lyrics?\s+)?(video|audio)\b/gi, '')
+        .trim();
+}
+
+// Video channels are often named "Artist - Topic", "ArtistVEVO" or "Artist Official"
+function cleanArtist(artist) {
+    return artist.replace(/\s*-\s*Topic$/i, '').replace(/\s*VEVO$/i, '').replace(/\s+Official$/i, '').trim();
+}
+
+// Lower case letters and digits only, so that spacing, punctuation and accents don't matter
+function simplify(text) {
+    return text.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+}
+
+function agree(a, b) {
+    return a === b || (Math.min(a.length, b.length) >= 3 && (a.includes(b) || b.includes(a)));
+}
+
+// What to search for, in order of likelihood. Video titles often read "Artist - Song", either on the
+// artist's own channel or on a label's, where the channel's name isn't the artist.
+function searchTerms(channel, videoTitle) {
+    const artist = cleanArtist(channel);
+    const title = cleanTitle(videoTitle);
+    const [first, ...rest] = title.split(/\s+[-–—]\s+/);
+    if (rest.length === 0)
+        return [{artist, title}];
+
+    const named = {artist: first, title: rest.join(' - ')};
+    return agree(simplify(first), simplify(artist)) ? [named] : [{artist, title}, named];
+}
+
+// A search result is the song only if both its title and its artist agree with what's playing. A video
+// title like "Artist - Song" under a label's channel still names the artist, so the title counts too.
+// An exact title comes first, so that the studio recording wins over "(Live in …)".
+function findSong(results, artist, title) {
+    const singer = simplify(artist);
+    const song = simplify(title);
+    const ranked = [];
+    for (const result of results ?? []) {
+        const resultArtist = simplify(result.artistName ?? '');
+        const fullName = simplify(result.trackName ?? '');
+        const shortName = simplify(cleanTitle(result.trackName ?? ''));
+        const sameArtist = agree(resultArtist, singer) || (resultArtist.length >= 3 && song.includes(resultArtist));
+        if (!resultArtist || !shortName || !sameArtist || !agree(shortName, song))
+            continue;
+
+        const exact = [fullName, resultArtist + fullName].includes(song);
+        const close = [shortName, resultArtist + shortName].includes(song);
+        ranked.push({result, rank: exact ? 0 : close ? 1 : 2});
+    }
+    return ranked.sort((a, b) => a.rank - b.rank)[0]?.result ?? null;
+}
+
+function fetchBytes(session, url, cancellable) {
+    return new Promise((resolve, reject) => {
+        const message = Soup.Message.new('GET', url);
+        session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, cancellable, (_, result) => {
+            try {
+                const bytes = session.send_and_read_finish(result);
+                if (message.get_status() !== Soup.Status.OK)
+                    throw new Error(`${url} answered ${message.get_status()}`);
+                const [contentType] = message.get_response_headers().get_content_type();
+                resolve({bytes, contentType});
+            } catch (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+// Finds a sharper cover for a song on iTunes Search. Only the title and artist are sent.
+class CoverLookup {
+    constructor() {
+        this._session = new Soup.Session({timeout: 15});
+        this._covers = new Map();
+    }
+
+    // Calls back with the cover, or with null when the catalogue doesn't have the song
+    find(artist, title, callback) {
+        const key = `${artist}\n${title}`;
+        if (this._covers.has(key)) {
+            this.cancel();
+            callback(this._covers.get(key));
+            return;
+        }
+        if (key === this._pendingKey)
+            return;
+
+        this.cancel();
+        const cancellable = this._cancellable = new Gio.Cancellable();
+        this._pendingKey = key;
+        this._search(searchTerms(artist, title), cancellable).then(cover => {
+            this._save(key, cover);
+            if (!cancellable.is_cancelled()) {
+                this._clearPending();
+                callback(cover);
+            }
+        }).catch(error => {
+            if (!cancellable.is_cancelled()) {
+                // Left unsaved, so that the next look at the dashboard tries again
+                this._clearPending();
+                console.debug(`Caelestia Dashboard: couldn't look up a cover: ${error.message}`);
+            }
+        });
+    }
+
+    async _search(terms, cancellable) {
+        let song = null;
+        for (const {artist, title} of terms) {
+            const term = encodeURIComponent(`${artist} ${title}`);
+            const search = await fetchBytes(this._session,
+                `${COVER_SEARCH_URL}?term=${term}&media=music&entity=song&limit=5`, cancellable);
+            song = findSong(JSON.parse(textDecoder.decode(search.bytes.get_data())).results, artist, title);
+            if (song)
+                break;
+        }
+        if (!song?.artworkUrl100)
+            return null;
+
+        // The catalogue serves each cover at whatever size its address asks for
+        const size = `${FETCHED_COVER_SIZE}x${FETCHED_COVER_SIZE}`;
+        const art = await fetchBytes(this._session, song.artworkUrl100.replace(/\/\d+x\d+bb\./, `/${size}bb.`), cancellable);
+        return art.contentType?.startsWith('image/') ? Gio.BytesIcon.new(art.bytes) : null;
+    }
+
+    _save(key, cover) {
+        this._covers.set(key, cover);
+        if (this._covers.size > MAX_SAVED_COVERS)
+            this._covers.delete(this._covers.keys().next().value);
+    }
+
+    _clearPending() {
+        this._cancellable = null;
+        this._pendingKey = null;
+    }
+
+    cancel() {
+        this._cancellable?.cancel();
+        this._clearPending();
+    }
+
+    destroy() {
+        this.cancel();
+        this._session.abort();
+    }
 }
 
 // Follows the player that's playing, and adds the album and position GNOME's player object leaves out
@@ -30,8 +203,10 @@ export const MediaController = GObject.registerClass({
 
         this._mediaSource = mediaSource;
         this._cancellable = new Gio.Cancellable();
+        this._coverLookup = new CoverLookup();
         this.player = null;
         this.position = 0;
+        this.coverIcon = null;
 
         mediaSource.connectObject(
             'player-added', (_, player) => this._watchPlayer(player),
@@ -56,7 +231,47 @@ export const MediaController = GObject.registerClass({
             this.player = players.find(player => this._isPlaying(player)) ??
                 (players.includes(this.player) ? this.player : players[0] ?? null);
         }
+        this._syncCover();
         this.emit('changed');
+    }
+
+    _syncCover() {
+        const url = this.player?.trackCoverUrl ?? '';
+        // GNOME fills in "Unknown artist" and the like, so this reads what the player itself sent
+        const artists = this._metadata('xesam:artist');
+        const artist = Array.isArray(artists) ? artists[0] : null;
+        const title = this._metadata('xesam:title');
+        const key = [url, artist, title].join('\n');
+        if (key === this._coverKey)
+            return;
+
+        this._coverKey = key;
+        this._coverLookup.cancel();
+        this.coverIcon = url ? new Gio.FileIcon({file: Gio.File.new_for_uri(url)}) : null;
+
+        const isNamed = typeof artist === 'string' && artist && typeof title === 'string' && title;
+        this._songToLookUp = isNamed && isSmallPicture(url) ? {artist, title} : null;
+        // The position timer runs while the dashboard shows
+        if (this._timeoutId)
+            this._lookUpCover();
+    }
+
+    // Asks only while the dashboard shows, so a song nobody looks at isn't sent anywhere
+    _lookUpCover() {
+        const song = this._songToLookUp;
+        if (!song)
+            return;
+
+        this._coverLookup.find(song.artist, song.title, cover => {
+            if (this._songToLookUp !== song)
+                return;
+
+            this._songToLookUp = null;
+            if (cover) {
+                this.coverIcon = cover;
+                this.emit('changed');
+            }
+        });
     }
 
     get isPlaying() {
@@ -97,6 +312,7 @@ export const MediaController = GObject.registerClass({
             return;
 
         this._updatePosition();
+        this._lookUpCover();
         this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
             if (this.isPlaying)
                 this._updatePosition();
@@ -134,6 +350,7 @@ export const MediaController = GObject.registerClass({
     destroy() {
         this.stop();
         this._cancellable.cancel();
+        this._coverLookup.destroy();
         this._mediaSource.disconnectObject(this);
         this._mediaSource.players.forEach(player => player.disconnectObject(this));
     }
@@ -268,12 +485,10 @@ class MediaView extends St.BoxLayout {
         this._album.text = (player ? album : 'No media') || 'Unknown album';
         this._artist.text = player ? player.trackArtists.join(', ') : 'No media';
 
-        const coverUrl = player?.trackCoverUrl;
-        this._cover.gicon = coverUrl
-            ? new Gio.FileIcon({file: Gio.File.new_for_uri(coverUrl)})
-            : new Gio.ThemedIcon({name: 'audio-x-generic-symbolic'});
-        this._coverClip.enabled = !!coverUrl;
-        setStyleClass(this._cover, 'no-art', !coverUrl);
+        const {coverIcon} = this._controller;
+        this._cover.gicon = coverIcon ?? new Gio.ThemedIcon({name: 'audio-x-generic-symbolic'});
+        this._coverClip.enabled = !!coverIcon;
+        setStyleClass(this._cover, 'no-art', !coverIcon);
 
         this._playPause.icon_name = isPlaying ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic';
         this._playPause.reactive = !!player;

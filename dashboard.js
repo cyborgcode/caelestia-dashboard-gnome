@@ -662,7 +662,7 @@ class Dashboard extends St.BoxLayout {
 
         this.connect('notify::mapped', () => this._onMappedChanged());
         this.connect('destroy', () => {
-            this._stopWeatherRefresh();
+            this._stopDelayedUpdates();
             if (this._prepareId)
                 GLib.source_remove(this._prepareId);
             this._stopWaitingForPrepareFrame();
@@ -778,18 +778,31 @@ class Dashboard extends St.BoxLayout {
     _onMappedChanged() {
         if (this.mapped) {
             this._syncIndicator(false);
-            this._stats.start();
-            this._media.start();
+            // The live numbers and the media position can start once the first frame is out, so the
+            // dashboard shows up that much sooner, also when the pointer moves to it from another menu
+            this._startUpdatesId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                delete this._startUpdatesId;
+                this._stats.start();
+                this._media.start();
+                return GLib.SOURCE_REMOVE;
+            });
             this._weatherRefreshId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, WEATHER_REFRESH_DELAY, () => {
                 delete this._weatherRefreshId;
                 this._weather.refresh();
                 return GLib.SOURCE_REMOVE;
             });
         } else {
-            this._stopWeatherRefresh();
+            this._stopDelayedUpdates();
             this._stats.stop();
             this._media.stop();
         }
+    }
+
+    _stopDelayedUpdates() {
+        if (this._startUpdatesId)
+            GLib.source_remove(this._startUpdatesId);
+        delete this._startUpdatesId;
+        this._stopWeatherRefresh();
     }
 
     _stopWeatherRefresh() {

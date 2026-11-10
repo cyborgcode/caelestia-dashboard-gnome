@@ -4,6 +4,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {Dashboard} from './dashboard.js';
+import {MenuSwitchDelay} from './menuSwitch.js';
 
 // The clock's dropdown already handles opening, closing, input grabs and blocking banners, so the
 // dashboard is that same menu with its content swapped. It keeps GNOME's own shape and animation.
@@ -26,11 +27,14 @@ export default class CaelestiaDashboardExtension extends Extension {
         menu._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.AUTOMATIC_FOR_OPACITY);
 
         this._dashboard.prepareInBackground(menu);
+
+        this._menuSwitchDelay = new MenuSwitchDelay(Main.panel.menuManager);
     }
 
     disable() {
-        const {menu} = this._dateMenu;
+        this._menuSwitchDelay.destroy();
 
+        const {menu} = this._dateMenu;
         menu.close();
         menu._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ALWAYS);
 
@@ -40,5 +44,6 @@ export default class CaelestiaDashboardExtension extends Extension {
         this._dateMenu = null;
         this._dashboard = null;
         this._originalContent = null;
+        this._menuSwitchDelay = null;
     }
 }
